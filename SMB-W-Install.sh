@@ -45,8 +45,8 @@ echo "copying the SMB-W binary to each host"
 
 
 echo "Retrieving tsmb.conf file from github and copying it to /mnt/fusion/shared/config/"
-  wget https://raw.githubusercontent.com/weka/SMB-W/main/tsmb.conf?token=GHSAT0AAAAAABRDXNRWJRJTUY6JQHL6RIHIYR56NJQ
-  sudo cp tsmb.conf\?token\=GHSAT0AAAAAABRDXNRWJRJTUY6JQHL6RIHIYR56NJQ /mnt/fusion/shared/config/tsmb.conf
+  wget -O tsmb.conf https://raw.githubusercontent.com/weka/SMB-W/main/tsmb.conf?token=GHSAT0AAAAAABRDXNRWJRJTUY6JQHL6RIHIYR56NJQ
+  sudo cp tsmb.conf /mnt/fusion/shared/config/
 
 echo "Installing necessary packages for Active / Active setup"
   cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} "sudo yum install corosync pacemaker pcs krb5-workstation passwd corosynclib realmd libnss-sss libpam-sss sssd sssd-tools adcli samba-common-bin packagekit krb5-user -y"
@@ -91,9 +91,9 @@ echo "Setup adcli join"
   echo "Weka.io123456" |sudo adcli join --domain WEKADEMO.COM --service-name=cifs --computer-name SMB-W --host-fqdn smb-w.WEKADEMO.COM -v -U Administrator --stdin-password 
   
 echo "Retrieving sssd.conf and propogating"
-  wget https://raw.githubusercontent.com/weka/SMB-W/main/sssd.conf?token=GHSAT0AAAAAABRDXNRW6JPB2ZOGHAU5STD2YR6BMQA
-  sudo cp sssd.conf\?token\=GHSAT0AAAAAABRDXNRW6JPB2ZOGHAU5STD2YR6BMQA /mnt/fusion/sssd.conf
-  sudo cp /etc/krb5.keytab /mnt/fusion/krb5.keytab
+  wget -O sssd.conf https://raw.githubusercontent.com/weka/SMB-W/main/sssd.conf?token=GHSAT0AAAAAABRDXNRW6JPB2ZOGHAU5STD2YR6BMQA
+  sudo cp sssd.conf /mnt/fusion/
+  sudo cp /etc/krb5.keytab /mnt/fusion/
   cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} "sudo cp /mnt/fusion/krb5.keytab /etc/ && sudo cp /mnt/fusion/sssd.conf /etc/sssd/ && sudo chmod 600 /etc/sssd/sssd.conf" 
 
 echo "start the sssd service"
