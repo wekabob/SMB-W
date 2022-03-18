@@ -44,9 +44,9 @@ echo "copying the SMB-W binary to each host"
   #sudo cp /mnt/weka/ec2-user/tuxera-smb-3022.2.22-x86_64-weka6-user-cluster/smb/conf/tsmb.conf /mnt/fusion/shared/config/
 
 
-echo "Retrieving tsmb.conf file from github"
+echo "Retrieving tsmb.conf file from github and copying it to /mnt/fusion/shared/config/"
   wget https://raw.githubusercontent.com/weka/SMB-W/main/tsmb.conf?token=GHSAT0AAAAAABRDXNRWJRJTUY6JQHL6RIHIYR56NJQ
-  sudo mv tsmb.conf* /mnt/fusion/shared/config/tsmb.conf
+  sudo cp tsmb.conf\?token\=GHSAT0AAAAAABRDXNRWJRJTUY6JQHL6RIHIYR56NJQ /mnt/fusion/shared/config/tsmb.conf
 
 echo "Installing necessary packages for Active / Active setup"
   cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} "sudo yum install corosync pacemaker pcs krb5-workstation passwd corosynclib realmd libnss-sss libpam-sss sssd sssd-tools adcli samba-common-bin packagekit krb5-user -y"
