@@ -41,81 +41,9 @@ echo "copying the SMB-W binary to each host"
   #sudo cp /mnt/weka/ec2-user/tuxera-smb-3022.2.22-x86_64-weka6-user-cluster/smb/conf/tsmb.conf /mnt/fusion/shared/config/
 
 
-echo "Creating tsmb conf file"
-cat << HERE > /mnt/fusion/shared/config/tsmb.conf
-[global]
-#change to text when working with local users - no AD integration
-    userdb_type = ad
-# uncomment the line below if you want to use local users
-#    userdb_file = /mnt/fusion/shared/config/users_db.txt
-    runstate_dir = /var/lib/tsmb
-    enable_ipc = true
-    domain = WEKADEMO.COM
-
-#Set the interface used for Fusion resources (e.g enp59s0f1)
-    listen = ANY,0.0.0.0,IPv4,445,DIRECT_TCP
-    listen = ANY,::,IPv6,445,DIRECT_TCP
-    listen = ANY,0.0.0.0,IPv4,139,NBSS
-# For RDMA replace previous line with
-#   listen = ANY,0.0.0.0,RDMA_IPv4,445,SMBD
-    dialects = SMB2.002 SMB2.1 SMB3.0 SMB3.02 SMB3.1.1
-# set to true if you want to allow guest access
-    allow_guest = false
-    null_session_access = false
-    require_message_signing = false
-    encrypt_data = false
-    reject_unencrypted_access = true
-    unix_extensions = true
-    enable_oplock = true
-    # Using log_destination = syslog or file if you want to use dedicated log file
-    log_destination = file
-    log_level = 4
-    log_params = path=/var/lib/tsmb/tsmb.log,timestamp=true
-    durable_v1_timeout = 960
-    durable_v2_timeout = 180
-  sess_open_files_max = 1048574
-  open_files_max = 1048576
-  connections_max = 1048576
-  vfs_metadata_threads = 1024
-  vfs_data_threads = 1024
-  transport_rx_threads = 256
-  transport_tx_threads = 256
-  tcp_tickle = true
-  tcp_tickle_params = path=/mnt/fusion/shared/tcp_params
-  # Only users with uidnumber/gidnumber will be able to access shares
-  authz_require_posix = true
-  ca = true
-  ca_path = /mnt/fusion/shared/ca_params
-#Server name is the value you set for joining windows AD and should be added to the DNS as well
-  server_name = smb-w
-# For MMC support
-  privilegedb = /mnt/fusion/shared/config/privilege
-# Enable Auditing - Need also to enable per share
-  audit_enable = true
-  audit_params = path=/mnt/fusion/shared/logs/Audit,days=1,uid=true,sensitive_data=allow
-[/global]
-[share]
-  netname = C$
-  remark = Sample administrative share
-  path = /mnt/weka_acl
-  administrative = true
-[/share]
-[share]
-  netname = public
-  remark = Exporting /mnt/weka/data
-  path = /mnt/weka_acl/smb
-  permissions = everyone:full
-# ca = true
-# ca_params = path=/mnt/fusion/shared/ca_params
-#This for snapshot integration , make sure you .snapshots directory exist , share_root should point to relative path of the directory you share
-  vss = true
-  vss_params = path=/mnt/weka_acl/.snapshots,share_root=data,vg_name=smb_test_vg,fs_type=ext4
-# Enable Audit
-  audit_level = 5
-#By default SMB-W is case sensitive
- case_insensitive = true
-[/share]
-HERE
+echo "Retrieving tsmb.conf file from github"
+  wget https://raw.githubusercontent.com/weka/SMB-W/main/tsmb.conf?token=GHSAT0AAAAAABRDXNRWJRJTUY6JQHL6RIHIYR56NJQ
+  sudo mv tsmb.conf* /mnt/fusion/shared/config/tsmb.conf
 
 echo "Installing necessary packages for Active / Active setup"
   cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} sudo yum install corosync pacemaker pcs krb5-workstation passwd corosynclib realmd libnss-sss libpam-sss sssd sssd-tools adcli
