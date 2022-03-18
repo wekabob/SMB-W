@@ -88,7 +88,7 @@ echo "Configuration Options"
   sudo pcs property set no-quorum-policy=ignore
   
 echo "Setup adcli join"
-  sudo adcli join --domain WEKADEMO.COM --service-name=cifs --computer-name SMB-W --host-fqdn smb-w.WEKADEMO.COM -v -U Administrator -P Weka.io123456
+  echo "Weka.io123456" |sudo adcli join --domain WEKADEMO.COM --service-name=cifs --computer-name SMB-W --host-fqdn smb-w.WEKADEMO.COM -v -U Administrator --stdin-password 
   
 echo "Retrieving sssd.conf and propogating"
   wget https://raw.githubusercontent.com/weka/SMB-W/main/sssd.conf?token=GHSAT0AAAAAABRDXNRW6JPB2ZOGHAU5STD2YR6BMQA
