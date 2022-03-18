@@ -87,6 +87,15 @@ echo "Configuration Options"
   
 echo "Setup adcli join"
   sudo adcli join --domain WEKADEMO.COM --service-name=cifs --computer-name SMB-W --host-fqdn smb-w.WEKADEMO.COM -v -U Administrator -P Weka.io123456
+  
+echo "Retrieving sssd.conf and propogating"
+  wget https://raw.githubusercontent.com/weka/SMB-W/main/sssd.conf?token=GHSAT0AAAAAABRDXNRW6JPB2ZOGHAU5STD2YR6BMQA
+  sudo cp sssd* /mnt/fusion/sssd.conf
+  sudo cp /etc/krb5.keytab /mnt/fusion/krb5.keytab
+  cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} "sudo cp /mnt/fusion/krb5.keytab /etc/ && sudo cp /mnt/fusion/sssd.conf /etc/sssd/ && sudo chmod 600 /etc/sssd/sssd.conf" 
+
+echo "start the sssd service"
+  cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} sudo systemctl start sssd
 
 echo "Creating the tsmb_ha cluster resource"
   sudo pcs resource create tsmb_ha ocf:heartbeat:anything binfile=/usr/sbin/tsmb-server cmdline_options="-c /mnt/fusion/shared/config/tsmb.conf -p"
