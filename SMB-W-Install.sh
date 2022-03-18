@@ -5,6 +5,9 @@ set -o errexit
 echo "Reduce size of default FS to allow for Fusion FS creation"
 SIZE=$(weka fs -o availableTotal --no-header -R --name default | cut -d ' ' -f 1) && sudo weka fs update default --total-capacity $((SIZE - 21474836480))
 
+echo "Destroy SMB on WEKA"
+  sudo weka smb cluster destroy -f
+  
 echo "Creating directory under /home/weka/ for smb-w"
   sudo mkdir /mnt/weka/ec2-user && sudo chown ec2-user.ec2-user /mnt/weka/ec2-user
   sudo mkdir /mnt/weka/smb-w
@@ -81,6 +84,9 @@ echo "Enabling the cluster"
 echo "Configuration Options"
   sudo pcs property set stonith-enabled=false
   sudo pcs property set no-quorum-policy=ignore
+  
+echo "Setup adcli join"
+  sudo adcli join --domain WEKADEMO.COM --service-name=cifs --computer-name SMB-W --host-fqdn smb-w.WEKADEMO.COM -v -U Administrator -P Weka.io123456
 
 echo "Creating the tsmb_ha cluster resource"
   sudo pcs resource create tsmb_ha ocf:heartbeat:anything binfile=/usr/sbin/tsmb-server cmdline_options="-c /mnt/fusion/shared/config/tsmb.conf -p"
