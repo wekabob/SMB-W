@@ -92,7 +92,7 @@ echo "Setup adcli join"
   
 echo "Retrieving sssd.conf and propogating"
   wget https://raw.githubusercontent.com/weka/SMB-W/main/sssd.conf?token=GHSAT0AAAAAABRDXNRW6JPB2ZOGHAU5STD2YR6BMQA
-  sudo cp sssd* /mnt/fusion/sssd.conf
+  sudo cp sssd.conf\?token\=GHSAT0AAAAAABRDXNRW6JPB2ZOGHAU5STD2YR6BMQA /mnt/fusion/sssd.conf
   sudo cp /etc/krb5.keytab /mnt/fusion/krb5.keytab
   cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} "sudo cp /mnt/fusion/krb5.keytab /etc/ && sudo cp /mnt/fusion/sssd.conf /etc/sssd/ && sudo chmod 600 /etc/sssd/sssd.conf" 
 
