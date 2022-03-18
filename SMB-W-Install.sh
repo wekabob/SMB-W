@@ -49,8 +49,7 @@ echo "Retrieving tsmb.conf file from github"
   sudo mv tsmb.conf* /mnt/fusion/shared/config/tsmb.conf
 
 echo "Installing necessary packages for Active / Active setup"
-  cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} sudo yum install corosync pacemaker pcs krb5-workstation passwd corosynclib realmd libnss-sss libpam-sss sssd sssd-tools adcli
-samba-common-bin packagekit krb5-user -y
+  cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} sudo yum install corosync pacemaker pcs krb5-workstation passwd corosynclib realmd libnss-sss libpam-sss sssd sssd-tools adcli samba-common-bin packagekit krb5-user -y
 
 echo "Enabling Services and starting pcsd"
   cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} "sudo systemctl enable corosync && sudo systemctl enable pacemaker && sudo systemctl enable pcsd && sudo systemctl start pcsd"
