@@ -49,7 +49,7 @@ echo "Retrieving tsmb.conf file from github"
   sudo mv tsmb.conf* /mnt/fusion/shared/config/tsmb.conf
 
 echo "Installing necessary packages for Active / Active setup"
-  cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} sudo yum install corosync pacemaker pcs krb5-workstation passwd corosynclib realmd libnss-sss libpam-sss sssd sssd-tools adcli samba-common-bin packagekit krb5-user -y
+  cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} "sudo yum install corosync pacemaker pcs krb5-workstation passwd corosynclib realmd libnss-sss libpam-sss sssd sssd-tools adcli samba-common-bin packagekit krb5-user -y"
 
 echo "Enabling Services and starting pcsd"
   cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} "sudo systemctl enable corosync && sudo systemctl enable pacemaker && sudo systemctl enable pcsd && sudo systemctl start pcsd"
@@ -68,6 +68,9 @@ echo "Checking that the heartbeat file is distributed across the cluster"
 echo "HA Cluster Setup / You will be asked for a password.  Please use hacluster/weka.io123"
   for i in `cat /mnt/weka/ec2-user/hosts.txt`; do ssh $i "echo weka.io123 | sudo passwd hacluster --stdin";done
 
+echo "starting pcsd on all hosts"
+  cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} "sudo systemctl start pcsd"
+  
 echo "Authorizing Nodes"
   sudo pcs cluster auth `weka cluster host -b -o hostname --no-header | tr '\n' ' '`
 
