@@ -29,11 +29,11 @@ echo "Unpacking tar"
 
 echo "Creating SMB-W Directories"
   sudo mkdir -m 777 /mnt/weka/data
-  sudo mkdir /mnt/fusion/shared
-  sudo mkdir /mnt/fusion/shared/tcp_params
-  sudo mkdir /mnt/fusion/shared/ca_params
-  sudo mkdir /mnt/fusion/shared/config
-  sudo mkdir /mnt/fusion/shared/logs
+  sudo mkdir -p /mnt/fusion/shared
+  sudo mkdir -p /mnt/fusion/shared/tcp_params
+  sudo mkdir -p /mnt/fusion/shared/ca_params
+  sudo mkdir -p /mnt/fusion/shared/config
+  sudo mkdir -p /mnt/fusion/shared/logs
 
 echo "creating the SMB-W log directory on each host"
   cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} sudo mkdir -p /var/lib/tsmb/log
