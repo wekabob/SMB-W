@@ -59,7 +59,7 @@ echo "Running checks"
   cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} sudo systemctl status pacemaker |grep -i loaded
 
 echo "Setup 'anything' resource agent"
-  cd /mnt/weka/ec2-user && wget https://raw.githubusercontent.com/ClusterLabs/resource-agents/main/heartbeat/anything
+  cd /mnt/weka/ec2-user && wget -O anything https://raw.githubusercontent.com/ClusterLabs/resource-agents/main/heartbeat/anything
   cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} "sudo cp /mnt/weka/ec2-user/anything /usr/lib/ocf/resource.d/heartbeat/ && sudo chmod a+rwx /usr/lib/ocf/resource.d/heartbeat/anything"
 
 echo "Checking that the heartbeat file is distributed across the cluster"
