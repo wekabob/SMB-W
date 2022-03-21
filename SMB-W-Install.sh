@@ -8,6 +8,10 @@ SIZE=$(weka fs -o availableTotal --no-header -R --name default | cut -d ' ' -f 1
 echo "Destroy SMB on WEKA"
   sudo weka smb cluster destroy -f
   
+echo "Remove SMB Shares"
+  sudo weka smb share remove 0 -f
+  sudo weka smb share remove 1 -f
+  
 echo "Creating directory under /home/weka/ for smb-w"
   sudo mkdir /mnt/weka/ec2-user && sudo chown ec2-user.ec2-user /mnt/weka/ec2-user
   sudo mkdir /mnt/weka/smb-w
