@@ -27,10 +27,10 @@ echo "Creating FS /mnt/fusion for SMB-W"
   cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 df -h -t wekafs |grep -i fusion
 
 echo "Downloading the Tuxera image for AWS install"
-  cd /mnt/weka/ec2-user && wget https://www.tuxera.com/download/wekaio/tuxera-smb-3022.2.22-x86_64-weka6-user-cluster.tgz
+  cd /mnt/weka/ec2-user && wget https://www.tuxera.com/download/wekaio/tuxera-smb-3022.7.28-r1-x86_64-weka27-amzn2-user-cluster.tgz
 
 echo "Unpacking tar"
-  cd /mnt/weka/ec2-user  && tar -xzvf tuxera-smb-3022.2.22-x86_64-weka6-user-cluster.tgz
+  cd /mnt/weka/ec2-user  && tar -xzvf tuxera-smb-3022.7.28-r1-x86_64-weka27-amzn2-user-cluster.tgz
 
 
 echo "Creating SMB-W Directories"
@@ -45,8 +45,8 @@ echo "creating the SMB-W log directory on each host"
   cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} sudo mkdir -p /var/lib/tsmb/log
 
 echo "copying the SMB-W binary to each host"
-  cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} sudo cp /mnt/weka/ec2-user/tuxera-smb-3022.2.22-x86_64-weka6-user-cluster/smb/bin/tsmb-server /usr/sbin
-  cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} sudo cp /mnt/weka/ec2-user/tuxera-smb-3022.2.22-x86_64-weka6-user-cluster/smb/tools/* /usr/bin/
+  cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} sudo cp /mnt/weka/ec2-user/tuxera-smb-3022.7.28-r1-x86_64-weka27-amzn2-user-cluster/smb/bin/tsmb-server /usr/sbin
+  cat /mnt/weka/ec2-user/hosts.txt |xargs -I {} -P 0 ssh {} sudo cp /mnt/weka/ec2-user/tuxera-smb-3022.7.28-r1-x86_64-weka27-amzn2-user-cluster/smb/tools/* /usr/bin/
 
 echo "Copying tsmb.conf file from /home/ec2-user/smb-w to /mnt/fusion/shared/config/"
   sudo cp /mnt/weka/ec2-user/smb-w/tsmb.conf /mnt/fusion/shared/config/
